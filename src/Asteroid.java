@@ -12,7 +12,7 @@ public class Asteroid extends Character {
 
         int accelerationAmount = 1 + rnd.nextInt(10);
         for (int i = 0; i < accelerationAmount; i++) {
-            accelerate(2);
+            accelerate(AsteroidsApplication.ASTEROID_SPEED);
         }
 
         this.rotationalMovement = 0.5 - rnd.nextDouble();
