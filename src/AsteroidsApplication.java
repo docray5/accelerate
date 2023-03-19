@@ -34,9 +34,8 @@ public class AsteroidsApplication extends Application {
         pane.setPrefSize(WIDTH, HEIGHT);
         pane.setBackground(Background.fill(BACKGROUND));
 
-        // TODO this text on top
-        Text text = new Text(10, 35, "Points: 0");
-        text.setFont(Font.font("Verdana", 36));
+        Text text = new Text(WIDTH/2.0 - 250, HEIGHT/2.0 + 20, "Points: 0");
+        text.setFont(Font.font("Consolas", 100));
         text.setFill(POINTS_COLOR);
         pane.getChildren().add(text);
         AtomicInteger points = new AtomicInteger();
@@ -165,5 +164,8 @@ public class AsteroidsApplication extends Application {
 // TODO add particles
 // TODO some glow, vignette, shadows and other VFX
 // TODO Game over screen
-// TODO Maybe pause menu
+// TODO Maybe pause menu and high score
 // TODO make bullets disappear after they leave the screen
+// TODO Thruster
+// TODO Maybe move to LibGdx
+// TODO Add pixel art
