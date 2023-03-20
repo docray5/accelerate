@@ -1,16 +1,15 @@
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
 public class Character {
-    private final Polygon character;
+    private final Shape character;
     private Point2D movement;
     private boolean alive;
 
-    public Character(Polygon polygon, int x, int y, Color color) {
+    public Character(Shape shape, int x, int y, Color color) {
         this.alive = true;
-        this.character = polygon;
+        this.character = shape;
         this.character.setTranslateX(x);
         this.character.setTranslateY(y);
         this.character.setFill(color);
@@ -79,7 +78,7 @@ public class Character {
         return !alive;
     }
 
-    public Polygon getCharacter() {
+    public Shape getCharacter() {
         return character;
     }
 

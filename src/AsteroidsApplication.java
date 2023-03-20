@@ -53,6 +53,8 @@ public class AsteroidsApplication extends Application {
         }
         asteroids.forEach(asteroid -> pane.getChildren().add(asteroid.getCharacter()));
 
+        ArrayList<Particle> particles = new ArrayList<>();
+
         Scene scene = new Scene(pane);
 
         Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
@@ -65,6 +67,7 @@ public class AsteroidsApplication extends Application {
             private long lastSecond = 0;
             private long frameCount = 0;
             private long lastShot = 0;
+            private long lastParticle = 0;
 
             @Override
             public void handle(long now) {
@@ -79,6 +82,7 @@ public class AsteroidsApplication extends Application {
 
                     lastSecond = now;
                     frameCount = 0;
+                    System.out.println("Total memory: " + Runtime.getRuntime().totalMemory()/1024 + ", Free memory: " + Runtime.getRuntime().freeMemory()/1024 + ", Diff: " + (Runtime.getRuntime().totalMemory()/1024 - Runtime.getRuntime().freeMemory()/1024));
                 }
                 frameCount++;
 
@@ -87,7 +91,18 @@ public class AsteroidsApplication extends Application {
 
                 if(pressedKeys.getOrDefault(KeyCode.RIGHT, false)) ship.turnRight();
 
-                if(pressedKeys.getOrDefault(KeyCode.UP, false)) ship.accelerate(SHIP_SPEED * FPS_RATIO);
+                if(pressedKeys.getOrDefault(KeyCode.UP, false)) {
+                    ship.accelerate(SHIP_SPEED * FPS_RATIO);
+                    if (now - lastParticle > 5_000_000L) {
+                        lastParticle = now;
+                        Particle particle = new Particle(
+                                (int)ship.getCharacter().getTranslateX()+4 + new Random().nextInt(10) -5,
+                                (int)ship.getCharacter().getTranslateY() + new Random().nextInt(10) -5,
+                                now, Color.AQUAMARINE, (int) -ship.getCharacter().getRotate());
+                        particles.add(particle);
+                        pane.getChildren().add(particle.getCharacter());
+                    }
+                }
 
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 3 && now - lastShot > 1_000_000_000L) {
                     lastShot = now;
@@ -99,12 +114,27 @@ public class AsteroidsApplication extends Application {
                     projectile.setMovement(projectile.getMovement().normalize().multiply(3 * FPS_RATIO));
 
                     pane.getChildren().add(projectile.getCharacter());
+
+                    for (int i = 0; i < 25; i++) {
+                        Particle particle = new Particle(
+                                (int)ship.getCharacter().getTranslateX()+4 + new Random().nextInt(10) -5,
+                                (int)ship.getCharacter().getTranslateY() + new Random().nextInt(10) -5,
+                                now, Color.WHITE, (int)ship.getCharacter().getRotate()
+                        );
+                        particles.add(particle);
+                        pane.getChildren().add(particle.getCharacter());
+                    }
+                }
+
+                for (Particle particle : particles) {
+                    if (now - particle.getTimeBorn() > particle.getLifeTime()) particle.setAlive(false);
                 }
 
                 // --------------Move-----------------
                 ship.move();
                 asteroids.forEach(Character::move);
                 projectiles.forEach(Character::move);
+                particles.forEach(Character::move);
 
                 // ---------Check for collisions-------------
                 projectiles.forEach(projectile -> {
@@ -122,6 +152,7 @@ public class AsteroidsApplication extends Application {
 
                 removeCharacterFromListAndPane(projectiles, pane);
                 removeCharacterFromListAndPane(asteroids, pane);
+                removeParticleFromListAndPane(particles, pane);
 
                 asteroids.forEach(asteroid -> {
                     if (ship.collide(asteroid)) {
@@ -147,7 +178,6 @@ public class AsteroidsApplication extends Application {
 
     public static void main(String[] args) {
         launch(AsteroidsApplication.class);
-        WIDTH = 0;
     }
 
     // TODO this could be improved
@@ -159,13 +189,24 @@ public class AsteroidsApplication extends Application {
                 .filter(Character::isNotAlive)
                 .toList());
     }
+
+    public static void removeParticleFromListAndPane(ArrayList<Particle> list, Pane pane) {
+        list.stream()
+                .filter(Particle::isNotAlive)
+                .forEach(character -> pane.getChildren().remove(character.getCharacter()));
+        list.removeAll(list.stream()
+                .filter(Particle::isNotAlive)
+                .toList());
+    }
 }
 
 // TODO add particles
 // TODO some glow, vignette, shadows and other VFX
 // TODO Game over screen
+// TODO Timer for how long u survived
 // TODO Maybe pause menu and high score
 // TODO make bullets disappear after they leave the screen
 // TODO Thruster
 // TODO Maybe move to LibGdx
 // TODO Add pixel art
+// TODO MAKE A DOCUMENT
