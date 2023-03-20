@@ -34,10 +34,10 @@ public class Character {
         changeY *= speed;
         changeY *= AsteroidsApplication.FPS_RATIO;
 
-        if (this.movement.getX() + changeX > 4) return;
-        if (this.movement.getX() + changeX < -4) return;
-        if (this.movement.getY() + changeY > 4) return;
-        if (this.movement.getY() + changeY < -4) return;
+        if (this.movement.getX() + changeX > 3) return;
+        if (this.movement.getX() + changeX < -3) return;
+        if (this.movement.getY() + changeY > 3) return;
+        if (this.movement.getY() + changeY < -3) return;
 
         this.movement = this.movement.add(changeX, changeY);
     }
