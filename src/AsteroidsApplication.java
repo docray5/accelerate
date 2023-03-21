@@ -22,10 +22,10 @@ public class AsteroidsApplication extends Application {
     public static Color SHIP_COLOR = Color.rgb(70, 196, 195);
     // when adding thruster color to ship change ship to be light green grass and thruster to be the current ship color
     public static Color PROJECTILE_COLOR = Color.rgb(202, 132, 39);
-    public static Color POINTS_COLOR = Color.rgb(245, 233, 207);
+    public static Color POINTS_COLOR = Color.rgb(70, 70, 93);
     public static double ASTEROID_SPEED = 0.08;
     public static double PROJECTILE_SPEED = 0.15;
-    public static double SHIP_SPEED = 0.03;
+    public static double SHIP_SPEED = 0.02;
 
     // object Variables
     private Pane pane;
@@ -67,33 +67,42 @@ public class AsteroidsApplication extends Application {
                 frameCount++;
 
                 // ----------------Controls-----------------
-                if(pressedKeys.getOrDefault(KeyCode.LEFT, false)) ship.turnLeft();
+                if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) ship.turnLeft();
 
-                if(pressedKeys.getOrDefault(KeyCode.RIGHT, false)) ship.turnRight();
+                if (pressedKeys.getOrDefault(KeyCode.RIGHT, false)) ship.turnRight();
 
-                if(pressedKeys.getOrDefault(KeyCode.UP, false)) {
+                if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
                     ship.accelerate(SHIP_SPEED * FPS_RATIO);
                     if (now - lastParticle > 5_000_000L) {
                         lastParticle = now;
+
+                        //double shipRotation = Math.abs(ship.getCharacter().getRotate() - 360 * (int)(ship.getCharacter().getRotate() / 360));
+
+                        int particleX = (int) -Math.round(Math.cos(Math.toRadians(ship.getCharacter().getRotate()))) * 8 + (int) ship.getCharacter().getTranslateX();
+                        int particleY = (int) -Math.round(Math.sin(Math.toRadians(ship.getCharacter().getRotate()))) * 8 + (int) ship.getCharacter().getTranslateY();
+
                         createParticle(
-                                (int) ship.getCharacter().getTranslateX() + 4,
-                                (int) ship.getCharacter().getTranslateY() - 4,
-                                now, Color.AQUAMARINE, (int) -ship.getCharacter().getRotate(),
-                                0.1, 0.2, 700_000_000L);
+                                particleX + new Random().nextInt(6) -3,
+                                particleY + new Random().nextInt(6) -3,
+                                now, Color.LIGHTSLATEGRAY, (int) -ship.getCharacter().getRotate() - 90,
+                                (int) -ship.getCharacter().getRotate() + 90, 0.1, 0.2, 300_000_000L);
                     }
                 }
 
-                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 3 && now - lastShot > 1_000_000_000L) {
+                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 6 && now - lastShot > 500_000_000L) {
                     lastShot = now;
 
                     createProjectile();
 
                     ship.accelerate(-0.2);
 
+                    int particleX = (int) Math.round(Math.cos(Math.toRadians(ship.getCharacter().getRotate()))) * 6 + (int) ship.getCharacter().getTranslateX();
+                    int particleY = (int) Math.round(Math.sin(Math.toRadians(ship.getCharacter().getRotate()))) * 6 + (int) ship.getCharacter().getTranslateY();
+
                     for (int i = 0; i < 25; i++) {
-                        createParticle((int)ship.getCharacter().getTranslateX()+4 + new Random().nextInt(10) -5,
-                                (int)ship.getCharacter().getTranslateY() + new Random().nextInt(10) -5,
-                                now, Color.WHITE, (int)ship.getCharacter().getRotate(), 0.2, 0.3, 30_000_000L);
+                        createParticle(particleX + new Random().nextInt(10) -5,
+                                particleY + new Random().nextInt(10) -5,
+                                now, Color.WHITE, (int)ship.getCharacter().getRotate()-90, (int)ship.getCharacter().getRotate()+90, 0.2, 0.3, 30_000_000L);
                     }
                 }
 
@@ -108,18 +117,18 @@ public class AsteroidsApplication extends Application {
                     if (now - particle.getTimeBorn() > particle.getLifeTime()) particle.setAlive(false);
                 }
 
-                projectiles.forEach(projectile -> {
-                    asteroids.forEach(asteroid -> {
-                        if(projectile.collide(asteroid)) {
-                            projectile.setAlive(false);
-                            asteroid.setAlive(false);
-                        }
-                    });
-
-                    if(projectile.isNotAlive()) {
+                projectiles.forEach(projectile -> asteroids.forEach(asteroid -> {
+                    if(projectile.collide(asteroid)) {
+                        projectile.setAlive(false);
+                        asteroid.setAlive(false);
                         pointsText.setText("Points: " + points.addAndGet(1));
+
+                        for (int i = 0; i < 75; i++) createParticle((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
+                                now, ASTEROID_COLOR, 0.2, 0.3, 100_000_000);
+                        for (int i = 0; i < 75; i++) createParticle((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
+                                now, ASTEROID_COLOR, 0.1, 0.2, 100_000_000);
                     }
-                });
+                }));
 
                 asteroids.forEach(asteroid -> {
                     if (ship.collide(asteroid)) {
@@ -165,13 +174,15 @@ public class AsteroidsApplication extends Application {
         this.pane.getChildren().add(projectile.getCharacter());
     }
 
-    public void createParticle(int x, int y, long now, Color color, int direction, double minSpeed, double maxSpeed, long baseLifeTime) {
+    public void createParticle(int x, int y, long now, Color color, int fromDegrees, int toDegrees, double minSpeed, double maxSpeed, long baseLifeTime) {
         Particle particle = new Particle(
-                x + new Random().nextInt(10) -5,
-                y + new Random().nextInt(10) -5,
-                now, color, direction, minSpeed, maxSpeed, baseLifeTime);
+                x, y, now, color, fromDegrees, toDegrees, minSpeed, maxSpeed, baseLifeTime);
         this.particles.add(particle);
         this.pane.getChildren().add(particle.getCharacter());
+    }
+
+    public void createParticle(int x, int y, long now, Color color, double minSpeed, double maxSpeed, long baseLifeTime) {
+        createParticle(x, y, now, color, 0, 360, minSpeed, maxSpeed, baseLifeTime);
     }
 
     public void initialize() {
@@ -229,6 +240,7 @@ public class AsteroidsApplication extends Application {
 }
 
 // TODO add particles
+// TODO FINALLY FIX CHARACTER OUT OF SCREEN
 // TODO some glow, vignette, shadows and other VFX
 // TODO Game over screen
 // TODO Timer for how long u survived
@@ -242,6 +254,10 @@ public class AsteroidsApplication extends Application {
 // TODO Camera shake
 // TODO make screen actually scrollable?
 // TODO achievements like drifting or flying fast between asteroids
+// TODO destroy animation for asteroids
+// TODO big asteroid makes smaller asteroids
+// TODO projectile life time
+// TODO cleanup
 
 // Suggestions:
 // TODO An object for the whole scene and stuff????
