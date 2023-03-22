@@ -25,6 +25,10 @@ public class Character {
         this.character.setRotate(this.character.getRotate() + 4 * AsteroidsApplication.FPS_RATIO);
     }
 
+    /**
+     * @param speed
+     * accelerate in the direction that the character is looking
+     */
     public void accelerate(double speed) {
         double changeX = Math.cos(Math.toRadians(this.character.getRotate()));
         double changeY = Math.sin(Math.toRadians(this.character.getRotate()));
@@ -42,25 +46,26 @@ public class Character {
         this.movement = this.movement.add(changeX, changeY);
     }
 
-    // Move/write character on the screen by movement variable and check if character out of screen
+    /**
+     * Move/write character on the screen by movement variable and check if character is within the window border
+     */
     public void move() {
         this.character.setTranslateX(this.character.getTranslateX() + this.movement.getX());
         this.character.setTranslateY(this.character.getTranslateY() + this.movement.getY());
 
-        // TODO Fix character out of screen
-        if (this.character.getTranslateX() - this.character.getBoundsInParent().getWidth() < 0) {
+        if (this.character.getTranslateX() + this.character.getBoundsInParent().getWidth()/4 < 0) {
             this.character.setTranslateX(this.character.getTranslateX() + AsteroidsApplication.WIDTH);
         }
 
-        if (this.character.getTranslateX() + this.character.getBoundsInParent().getWidth() > AsteroidsApplication.WIDTH) {
+        if (this.character.getTranslateX() - this.character.getBoundsInParent().getWidth()/4 > AsteroidsApplication.WIDTH) {
             this.character.setTranslateX(this.character.getTranslateX() % AsteroidsApplication.WIDTH);
         }
 
-        if (this.character.getTranslateY() - this.character.getBoundsInParent().getHeight() < 0) {
+        if (this.character.getTranslateY() + this.character.getBoundsInParent().getHeight()/4 < 0) {
             this.character.setTranslateY(this.character.getTranslateY() + AsteroidsApplication.HEIGHT);
         }
 
-        if (this.character.getTranslateY() + this.character.getBoundsInParent().getHeight() > AsteroidsApplication.HEIGHT) {
+        if (this.character.getTranslateY() - this.character.getBoundsInParent().getHeight()/4 > AsteroidsApplication.HEIGHT) {
             this.character.setTranslateY(this.character.getTranslateY() % AsteroidsApplication.HEIGHT);
         }
     }

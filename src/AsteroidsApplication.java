@@ -143,7 +143,7 @@ public class AsteroidsApplication extends Application {
 
                 // ---------Spawn new Asteroids-------------
                 if(Math.random() < 0.005 * FPS_RATIO) {
-                    Asteroid asteroid = new Asteroid(WIDTH, HEIGHT);
+                    Asteroid asteroid = new Asteroid(WIDTH + 10, HEIGHT + 10);
                     if(!asteroid.collide(ship)) {
                         asteroids.add(asteroid);
                         pane.getChildren().add(asteroid.getCharacter());
@@ -239,28 +239,36 @@ public class AsteroidsApplication extends Application {
     }
 }
 
-// TODO add particles
-// TODO FINALLY FIX CHARACTER OUT OF SCREEN
+// TODO FINALLY FIX CHARACTER OUT OF SCREEN kinda done but still have to decide on whether characters stay within the window border or go off by their size
+// TODO fix thruster not being in the center of the rear of the ship
 // TODO some glow, vignette, shadows and other VFX
+// TODO add glow around projectiles and a little trail
+// TODO add snappy explosions of asteroids
+// TODO slow the ship a little
 // TODO Game over screen
 // TODO Timer for how long u survived
 // TODO Maybe pause menu and high score
-// TODO make bullets disappear after they leave the screen
-// TODO Thruster
 // TODO Add pixel art
 // TODO MAKE A DOCUMENT
 // TODO scalable difficulty
 // TODO Update color pallet
 // TODO Camera shake
-// TODO make screen actually scrollable?
+// TODO make three modes ARCADE MODE(the one where nothing goes off the screen), ENDLESS MODE(same as before one but no time in between asteroids spawn) AND ADVENTURE MODE(screen actually scrollable)
 // TODO achievements like drifting or flying fast between asteroids
 // TODO destroy animation for asteroids
 // TODO big asteroid makes smaller asteroids
 // TODO projectile life time
 // TODO cleanup
+// TODO power ups like shield that makes you bounce of a asteroid instead of killing u
+// TODO add lives system
+// TODO some economy system
+// TODO add modifiable color palettes in the menu of the game
+// TODO smoother spawning of asteroids
+// TODO asteroids cant spawn INSIDE of the player
+// TODO statistics for how close and how fast you flew by an asteroid
+// TODO get double points for destroying asteroid after bullet teleported to other side of the screen
 
 // Suggestions:
 // TODO An object for the whole scene and stuff????
 // TODO packages??
-// TODO arrayList for all Characters in the game?
 // TODO Maybe move to LibGdx
