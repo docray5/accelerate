@@ -265,7 +265,8 @@ public class AsteroidsApplication extends Application {
 // TODO Timer for how long u survived
 // TODO Maybe pause menu and high score
 // TODO Add pixel art
-// TODO MAKE A DOCUMENT
+// TODO MAKE A DOCUMENT and milestones on github
+// TODO add some sort of goal to the game where you have to like go into destroying asteroids for something you need elsewhere
 // TODO scalable difficulty
 // TODO Update color pallet
 // TODO Camera shake
