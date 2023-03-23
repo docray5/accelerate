@@ -92,7 +92,7 @@ public class AsteroidsApplication extends Application {
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 6 && now - lastShot > 250_000_000L) {
                     lastShot = now;
 
-                    createProjectile();
+                    createProjectile(now);
 
                     ship.accelerate(-0.2);
 
@@ -113,8 +113,13 @@ public class AsteroidsApplication extends Application {
                 particles.forEach(Character::move);
 
                 // ---------Check for collisions and lifeTime-------------
-                for (Character particle : particles) {
-                    if (now - particle.getTimeBorn() > particle.getLifeTime()) particle.setAlive(false);
+                checkLifeTime(now, particles);
+                for (Character character : projectiles) {
+                    if (now - character.getTimeBorn() > character.getLifeTime()) {
+                        character.setAlive(false);
+                        for (int i = 0; i < 40; i++) createParticle((int) character.getCharacter().getTranslateX(), (int) character.getCharacter().getTranslateY(),
+                                now, PROJECTILE_COLOR, 0.1, 0.2, 100_000_000);
+                    }
                 }
 
                 projectiles.forEach(projectile -> asteroids.forEach(asteroid -> {
@@ -177,9 +182,9 @@ public class AsteroidsApplication extends Application {
         launch(AsteroidsApplication.class);
     }
 
-    public void createProjectile() {
+    public void createProjectile(long now) {
         Projectile projectile = new Projectile((int) this.ship.getCharacter().getTranslateX(),
-                (int) this.ship.getCharacter().getTranslateY());
+                (int) this.ship.getCharacter().getTranslateY(), now, 5_000_000_000L);
         projectile.getCharacter().setRotate(this.ship.getCharacter().getRotate());
 
         projectile.accelerate(PROJECTILE_SPEED);
@@ -243,6 +248,12 @@ public class AsteroidsApplication extends Application {
                 .filter(Character::isNotAlive)
                 .toList());
     }
+
+    public static void checkLifeTime(long now, List<Character> list) {
+        for (Character character : list) {
+            if (now - character.getTimeBorn() > character.getLifeTime()) character.setAlive(false);
+        }
+    }
 }
 
 // TODO FINALLY FIX CHARACTER OUT OF SCREEN kinda done but still have to decide on whether characters stay within the window border or go off by their size
@@ -250,7 +261,6 @@ public class AsteroidsApplication extends Application {
 // TODO some glow, vignette, shadows and other VFX
 // TODO add glow around projectiles and a little trail
 // TODO add snappy explosions of asteroids
-// TODO slow the ship a little
 // TODO Game over screen
 // TODO Timer for how long u survived
 // TODO Maybe pause menu and high score
@@ -262,14 +272,17 @@ public class AsteroidsApplication extends Application {
 // TODO make three modes ARCADE MODE(the one where nothing goes off the screen), ENDLESS MODE(same as before one but no time in between asteroids spawn) AND ADVENTURE MODE(screen actually scrollable)
 // TODO achievements like drifting or flying fast between asteroids
 // TODO CLEAN UP AND REFACTOR SMALL
+// TODO also fix the problem where i want to add a function to a method(that is used more than twice) and I have to create a new method? or add a lambda parameter?
 // TODO the asteroids getting smaller is a bit junk y
 // TODO transparent UI (like a blur)
-// TODO projectile life time
 // TODO cleanup
-// TODO power ups like shield that makes you bounce of a asteroid instead of killing u
+// TODO power ups like shield(makes you bounce of a asteroid instead of killing u), laser aim
+// TODO add CreateAsteroid method
 // TODO add lives system
 // TODO some economy system
 // TODO add modifiable color palettes in the menu of the game
+// TODO make asteroids bounce off of each other
+// TODO some sort of reward for flying skills
 // TODO smoother spawning of asteroids
 // TODO asteroids cant spawn INSIDE of the player
 // TODO statistics for how close and how fast you flew by an asteroid
