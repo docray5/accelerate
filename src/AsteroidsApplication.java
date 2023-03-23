@@ -25,7 +25,7 @@ public class AsteroidsApplication extends Application {
     public static Color POINTS_COLOR = Color.rgb(70, 70, 93);
     public static double ASTEROID_SPEED = 0.08;
     public static double PROJECTILE_SPEED = 0.15;
-    public static double SHIP_SPEED = 0.02;
+    public static double SHIP_SPEED = 0.017;
 
     // object Variables
     private Pane pane;
@@ -34,7 +34,7 @@ public class AsteroidsApplication extends Application {
     private Ship ship;
     private ArrayList<Character> projectiles;
     private ArrayList<Character> asteroids;
-    private ArrayList<Particle> particles;
+    private ArrayList<Character> particles;
     private Map<KeyCode, Boolean> pressedKeys;
     private Scene scene;
 
@@ -78,8 +78,8 @@ public class AsteroidsApplication extends Application {
 
                         //double shipRotation = Math.abs(ship.getCharacter().getRotate() - 360 * (int)(ship.getCharacter().getRotate() / 360));
 
-                        int particleX = (int) -Math.round(Math.cos(Math.toRadians(ship.getCharacter().getRotate()))) * 8 + (int) ship.getCharacter().getTranslateX();
-                        int particleY = (int) -Math.round(Math.sin(Math.toRadians(ship.getCharacter().getRotate()))) * 8 + (int) ship.getCharacter().getTranslateY();
+                        int particleX = (int) -Math.round(Math.cos(Math.toRadians(ship.getCharacter().getRotate()))) * 7 + (int) ship.getCharacter().getBoundsInParent().getCenterX();
+                        int particleY = (int) -Math.round(Math.sin(Math.toRadians(ship.getCharacter().getRotate()))) * 7 + (int) ship.getCharacter().getBoundsInParent().getCenterY();
 
                         createParticle(
                                 particleX + new Random().nextInt(6) -3,
@@ -89,7 +89,7 @@ public class AsteroidsApplication extends Application {
                     }
                 }
 
-                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 6 && now - lastShot > 500_000_000L) {
+                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 6 && now - lastShot > 250_000_000L) {
                     lastShot = now;
 
                     createProjectile();
@@ -113,7 +113,7 @@ public class AsteroidsApplication extends Application {
                 particles.forEach(Character::move);
 
                 // ---------Check for collisions and lifeTime-------------
-                for (Particle particle : particles) {
+                for (Character particle : particles) {
                     if (now - particle.getTimeBorn() > particle.getLifeTime()) particle.setAlive(false);
                 }
 
@@ -136,14 +136,29 @@ public class AsteroidsApplication extends Application {
                     }
                 });
 
+                // ----------breaking asteroids into smaller pieces-------------
+                ArrayList<Character> smallerAsteroids = new ArrayList<>();
+                for (Character asteroid : asteroids) {
+                    if (asteroid.isNotAlive() && asteroid.getTimeBorn() > 5) {
+                        for (int i = 0; i < 2; i++) {
+                            smallerAsteroids.add(new Asteroid((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(), (int) asteroid.getTimeBorn()/2));
+                        }
+                    }
+                }
+
+                for (Character asteroid : smallerAsteroids) {
+                    asteroids.add(asteroid);
+                    pane.getChildren().add(asteroid.getCharacter());
+                }
+
                 // ---------delete unnecessary Characters-------------
                 removeCharacterFromListAndPane(projectiles, pane);
                 removeCharacterFromListAndPane(asteroids, pane);
-                removeParticleFromListAndPane(particles, pane);
+                removeCharacterFromListAndPane(particles, pane);
 
                 // ---------Spawn new Asteroids-------------
-                if(Math.random() < 0.005 * FPS_RATIO) {
-                    Asteroid asteroid = new Asteroid(WIDTH + 10, HEIGHT + 10);
+                if(Math.random() < 0.0025 * FPS_RATIO) {
+                    Asteroid asteroid = new Asteroid(WIDTH + 10, HEIGHT + 10, 20);
                     if(!asteroid.collide(ship)) {
                         asteroids.add(asteroid);
                         pane.getChildren().add(asteroid.getCharacter());
@@ -204,7 +219,7 @@ public class AsteroidsApplication extends Application {
         this.asteroids = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT));
+            Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT), 20);
             this.asteroids.add(asteroid);
         }
         this.asteroids.forEach(asteroid -> this.pane.getChildren().add(asteroid.getCharacter()));
@@ -228,19 +243,10 @@ public class AsteroidsApplication extends Application {
                 .filter(Character::isNotAlive)
                 .toList());
     }
-
-    public static void removeParticleFromListAndPane(ArrayList<Particle> list, Pane pane) {
-        list.stream()
-                .filter(Particle::isNotAlive)
-                .forEach(character -> pane.getChildren().remove(character.getCharacter()));
-        list.removeAll(list.stream()
-                .filter(Particle::isNotAlive)
-                .toList());
-    }
 }
 
 // TODO FINALLY FIX CHARACTER OUT OF SCREEN kinda done but still have to decide on whether characters stay within the window border or go off by their size
-// TODO fix thruster not being in the center of the rear of the ship
+// TODO PLEASE MAKE IT SO I CAN USE ACTUAL CLASS INSTEAD OF CHARACTER IN ARRAYLISTS like asteroids
 // TODO some glow, vignette, shadows and other VFX
 // TODO add glow around projectiles and a little trail
 // TODO add snappy explosions of asteroids
@@ -255,8 +261,9 @@ public class AsteroidsApplication extends Application {
 // TODO Camera shake
 // TODO make three modes ARCADE MODE(the one where nothing goes off the screen), ENDLESS MODE(same as before one but no time in between asteroids spawn) AND ADVENTURE MODE(screen actually scrollable)
 // TODO achievements like drifting or flying fast between asteroids
-// TODO destroy animation for asteroids
-// TODO big asteroid makes smaller asteroids
+// TODO CLEAN UP AND REFACTOR SMALL
+// TODO the asteroids getting smaller is a bit junk y
+// TODO transparent UI (like a blur)
 // TODO projectile life time
 // TODO cleanup
 // TODO power ups like shield that makes you bounce of a asteroid instead of killing u

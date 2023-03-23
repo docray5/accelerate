@@ -4,8 +4,9 @@ public class Asteroid extends Character {
 
     private final double rotationalMovement;
 
-    public Asteroid(int x, int y) {
-        super(PolygonFactory.createPolygon(), x, y, AsteroidsApplication.ASTEROID_COLOR);
+    public Asteroid(int x, int y, int size) {
+        super(PolygonFactory.createPolygon(size), x, y, 2, 4, AsteroidsApplication.ASTEROID_COLOR, size, 0);
+        // we set size as time born bcs I am lazy and don't want to make any new variables
         Random rnd = new Random();
 
         super.getCharacter().setRotate(rnd.nextInt(360));
