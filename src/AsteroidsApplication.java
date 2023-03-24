@@ -89,7 +89,7 @@ public class AsteroidsApplication extends Application {
                     }
                 }
 
-                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 6 && now - lastShot > 250_000_000L) {
+                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && projectiles.size() < 6 && now - lastShot > 300_000_000L) {
                     lastShot = now;
 
                     createProjectile(now);
@@ -255,41 +255,3 @@ public class AsteroidsApplication extends Application {
         }
     }
 }
-
-// TODO FINALLY FIX CHARACTER OUT OF SCREEN kinda done but still have to decide on whether characters stay within the window border or go off by their size
-// TODO PLEASE MAKE IT SO I CAN USE ACTUAL CLASS INSTEAD OF CHARACTER IN ARRAYLISTS like asteroids
-// TODO some glow, vignette, shadows and other VFX
-// TODO add glow around projectiles and a little trail
-// TODO add snappy explosions of asteroids
-// TODO Game over screen
-// TODO Timer for how long u survived
-// TODO Maybe pause menu and high score
-// TODO Add pixel art
-// TODO MAKE A DOCUMENT and milestones on github
-// TODO add some sort of goal to the game where you have to like go into destroying asteroids for something you need elsewhere
-// TODO scalable difficulty
-// TODO Update color pallet
-// TODO Camera shake
-// TODO make three modes ARCADE MODE(the one where nothing goes off the screen), ENDLESS MODE(same as before one but no time in between asteroids spawn) AND ADVENTURE MODE(screen actually scrollable)
-// TODO achievements like drifting or flying fast between asteroids
-// TODO CLEAN UP AND REFACTOR SMALL
-// TODO also fix the problem where i want to add a function to a method(that is used more than twice) and I have to create a new method? or add a lambda parameter?
-// TODO the asteroids getting smaller is a bit junk y
-// TODO transparent UI (like a blur)
-// TODO cleanup
-// TODO power ups like shield(makes you bounce of a asteroid instead of killing u), laser aim
-// TODO add CreateAsteroid method
-// TODO add lives system
-// TODO some economy system
-// TODO add modifiable color palettes in the menu of the game
-// TODO make asteroids bounce off of each other
-// TODO some sort of reward for flying skills
-// TODO smoother spawning of asteroids
-// TODO asteroids cant spawn INSIDE of the player
-// TODO statistics for how close and how fast you flew by an asteroid
-// TODO get double points for destroying asteroid after bullet teleported to other side of the screen
-
-// Suggestions:
-// TODO An object for the whole scene and stuff????
-// TODO packages??
-// TODO Maybe move to LibGdx
