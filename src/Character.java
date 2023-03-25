@@ -2,7 +2,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
-public class Character {
+public abstract class Character {
     private final Shape character;
     private Point2D movement;
     private boolean alive;
@@ -32,11 +32,11 @@ public class Character {
     }
 
     public void turnLeft() {
-        this.character.setRotate(this.character.getRotate() - turningSpeed * AsteroidsApplication.FPS_RATIO);
+        this.character.setRotate(this.character.getRotate() - turningSpeed * Game.FPS_RATIO);
     }
 
     public void turnRight() {
-        this.character.setRotate(this.character.getRotate() + turningSpeed * AsteroidsApplication.FPS_RATIO);
+        this.character.setRotate(this.character.getRotate() + turningSpeed * Game.FPS_RATIO);
     }
 
     /**
@@ -48,9 +48,9 @@ public class Character {
         double changeY = Math.sin(Math.toRadians(this.character.getRotate()));
 
         changeX *= speed;
-        changeX *= AsteroidsApplication.FPS_RATIO;
+        changeX *= Game.FPS_RATIO;
         changeY *= speed;
-        changeY *= AsteroidsApplication.FPS_RATIO;
+        changeY *= Game.FPS_RATIO;
 
         if (this.movement.getX() + changeX > maxSpeed) return;
         if (this.movement.getX() + changeX < -maxSpeed) return;
@@ -68,19 +68,19 @@ public class Character {
         this.character.setTranslateY(this.character.getTranslateY() + this.movement.getY());
 
         if (this.character.getTranslateX() + this.character.getBoundsInParent().getWidth()/4 < 0) {
-            this.character.setTranslateX(this.character.getTranslateX() + AsteroidsApplication.WIDTH);
+            this.character.setTranslateX(this.character.getTranslateX() + Game.WIDTH);
         }
 
-        if (this.character.getTranslateX() - this.character.getBoundsInParent().getWidth()/4 > AsteroidsApplication.WIDTH) {
-            this.character.setTranslateX(this.character.getTranslateX() % AsteroidsApplication.WIDTH);
+        if (this.character.getTranslateX() - this.character.getBoundsInParent().getWidth()/4 > Game.WIDTH) {
+            this.character.setTranslateX(this.character.getTranslateX() % Game.WIDTH);
         }
 
         if (this.character.getTranslateY() + this.character.getBoundsInParent().getHeight()/4 < 0) {
-            this.character.setTranslateY(this.character.getTranslateY() + AsteroidsApplication.HEIGHT);
+            this.character.setTranslateY(this.character.getTranslateY() + Game.HEIGHT);
         }
 
-        if (this.character.getTranslateY() - this.character.getBoundsInParent().getHeight()/4 > AsteroidsApplication.HEIGHT) {
-            this.character.setTranslateY(this.character.getTranslateY() % AsteroidsApplication.HEIGHT);
+        if (this.character.getTranslateY() - this.character.getBoundsInParent().getHeight()/4 > Game.HEIGHT) {
+            this.character.setTranslateY(this.character.getTranslateY() % Game.HEIGHT);
         }
     }
 

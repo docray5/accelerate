@@ -6,7 +6,7 @@ public class PolygonFactory {
     public static Polygon createPolygon(int size) {
         Random rnd = new Random();
 
-        double finalSize = size + rnd.nextInt(2, 12);
+        double finalSize = size + rnd.nextInt(10) + 2;
 
         Polygon polygon = new Polygon();
         double c1 = Math.cos(Math.PI * 2 / 5);
