@@ -1,3 +1,7 @@
+package utils;
+
+import game.Game;
+
 public class FpsCounter {
     private long lastSecond;
     private long frameCount;

@@ -1,3 +1,6 @@
+package entities;
+
+import game.Game;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -68,5 +71,9 @@ public class Projectiles {
                     now, Color.WHITE, (int) ship.getCharacter().getRotate() - 90,
                     (int) ship.getCharacter().getRotate() + 90, 0.2, 0.3, 30_000_000L, 25);
         }
+    }
+
+    public void clear() {
+        this.projectiles.clear();
     }
 }

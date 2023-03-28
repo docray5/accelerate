@@ -1,3 +1,4 @@
+package entities;
 /*
 ---------------------------------------------------------
 This Abstract class is WIP and will probably get removed,

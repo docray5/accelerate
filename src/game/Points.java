@@ -1,3 +1,5 @@
+package game;
+
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -12,6 +14,11 @@ public class Points {
         this.text.setFont(Font.font("Consolas", 100));
         this.text.setFill(Game.POINTS_COLOR);
         this.points = new AtomicInteger();
+    }
+
+    public void reset() {
+        this.points.set(0);
+        this.text.setText("Points: 0");
     }
 
     public Text getText() {

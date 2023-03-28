@@ -1,7 +1,17 @@
+package game;
+
+import entities.Asteroids;
+import entities.Particles;
+import entities.Projectiles;
+import entities.Ship;
 import javafx.scene.Scene;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import logic.CollisionHandler;
+import logic.InputHandler;
 
 import java.util.Random;
 
@@ -22,7 +32,7 @@ public class Game {
 
     // -----------Class variables-------------
     private Scene scene;
-    private Pane pane;
+    private Pane gamePane;
     private Points points;
     private Ship ship;
     private InputHandler inputHandler;
@@ -30,33 +40,39 @@ public class Game {
     private Projectiles projectiles;
     private Asteroids asteroids;
     private CollisionHandler collisionHandler;
+    private GameOverWindow gameOverWindow;
+
+    // TODO maybe change it so each class has one parameter, Game game and from there we can get all the panes and other parameters
 
     public Game() {
         this.initialize();
     }
 
     private void initialize() {
-        this.pane = new Pane();
-        this.pane.setPrefSize(WIDTH, HEIGHT);
-        this.pane.setBackground(Background.fill(BACKGROUND));
+        StackPane root = new StackPane();
+        // For a shadow effect when on game over window Put different color
+        root.setBackground(Background.fill(BACKGROUND));
 
-        this.particles = new Particles(this.pane);
+        this.gamePane = new Pane();
+        this.gamePane.setPrefSize(WIDTH, HEIGHT);
+        this.gamePane.setBackground(Background.fill(BACKGROUND));
 
-        this.projectiles = new Projectiles(this.pane, this.particles);
+        this.particles = new Particles(this.gamePane);
+
+        this.projectiles = new Projectiles(this.gamePane, this.particles);
 
         this.points = new Points();
         this.ship = new Ship(WIDTH/2, HEIGHT/2, this.particles, this.projectiles);
-        this.pane.getChildren().add(this.points.getText());
-        this.pane.getChildren().add(this.ship.getCharacter());
+        this.gamePane.getChildren().add(this.points.getText());
+        this.gamePane.getChildren().add(this.ship.getCharacter());
 
-        this.asteroids = new Asteroids(this.pane, this.ship);
-        // spawn in a few asteroids at the start
-        for (int i = 0; i < 5; i++) {
-            Random rnd = new Random();
-            this.asteroids.addAsteroid(rnd.nextInt(WIDTH / 3), rnd.nextInt(HEIGHT), 20);
-        }
+        this.asteroids = new Asteroids(this.gamePane, this.ship);
+        spawnAsteroids();
 
-        this.scene = new Scene(this.pane);
+        this.gameOverWindow = new GameOverWindow(this);
+        root.getChildren().addAll(this.gamePane, this.gameOverWindow.getView());
+        this.scene = new Scene(root);
+        this.scene.getStylesheets().add("style.css");
 
         this.collisionHandler = new CollisionHandler(particles, ship, projectiles, asteroids);
 
@@ -66,7 +82,30 @@ public class Game {
     }
 
     public void gameOver() {
+        this.gamePane.setEffect(new GaussianBlur(30));
+        this.gameOverWindow.display();
+        this.inputHandler = new InputHandler(this.ship);
         System.out.println("Over!");
+    }
+
+    public void restart() {
+        System.out.println("restart");
+        this.gameOverWindow.hide();
+        this.gamePane.setEffect(null);
+        this.particles.clear();
+        this.projectiles.clear();
+        this.asteroids.clear();
+        this.points.reset();
+        this.gamePane.getChildren().setAll(this.points.getText(), this.ship.getCharacter());
+        this.ship.appear();
+        spawnAsteroids();
+    }
+
+    private void spawnAsteroids() { // TODO add variety
+        for (int i = 0; i < 5; i++) {
+            Random rnd = new Random();
+            this.asteroids.addAsteroid(rnd.nextInt(WIDTH / 3), rnd.nextInt(HEIGHT), 20);
+        }
     }
 
     public Scene getScene() {

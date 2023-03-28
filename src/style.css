@@ -1,0 +1,24 @@
+.over-pane {
+    -fx-background-color: #44445480;
+    -fx-border-color: #44445480;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+
+.btn-restart {
+    -fx-background-color: #D64862FF;
+    -fx-border-color: #D64862FF;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-font-size: 30px
+}
+
+.btn-restart:hover {
+    -fx-background-color: #D14156FF;
+    -fx-border-color: #D14156FF;
+}
+
+.btn-restart:pressed {
+    -fx-background-color: #C63550FF;
+    -fx-border-color: #C63550FF;
+}

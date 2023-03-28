@@ -1,3 +1,8 @@
+package entities;
+
+import game.Game;
+import utils.PolygonFactory;
+
 import java.util.Random;
 
 public class Asteroid extends Character {

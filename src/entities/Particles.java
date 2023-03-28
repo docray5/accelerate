@@ -1,3 +1,5 @@
+package entities;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -45,5 +47,9 @@ public class Particles {
             this.pane.getChildren().add(particle.getCharacter());
             this.lastParticleTime = now;
         }
+    }
+
+    public void clear() {
+        this.particles.clear();
     }
 }

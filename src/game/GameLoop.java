@@ -1,4 +1,7 @@
+package game;
+
 import javafx.animation.AnimationTimer;
+import utils.FpsCounter;
 
 public class GameLoop extends AnimationTimer {
     private final FpsCounter fpsCounter;
@@ -42,10 +45,5 @@ public class GameLoop extends AnimationTimer {
 
         // ---------Spawn new Asteroids-------------
         this.game.getAsteroids().spawnAsteroid();
-    }
-
-    public void gameOver() {
-        this.stop();
-        this.game.gameOver();
     }
 }

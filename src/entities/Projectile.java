@@ -1,3 +1,6 @@
+package entities;
+
+import game.Game;
 import javafx.scene.shape.Polygon;
 
 public class Projectile extends Character {

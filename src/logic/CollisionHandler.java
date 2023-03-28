@@ -1,3 +1,13 @@
+package logic;
+
+import entities.Asteroids;
+import entities.Particles;
+import entities.Projectiles;
+import entities.Ship;
+import game.Game;
+import game.GameLoop;
+import game.Points;
+
 public class CollisionHandler {
     private final Particles particles;
     private final Ship ship;
@@ -12,7 +22,7 @@ public class CollisionHandler {
     }
 
     public void handleCollisions(GameLoop gameLoop, long now) {
-        this.checkShipAndAsteroidCollision(gameLoop);
+        this.checkShipAndAsteroidCollision(gameLoop, now);
         this.checkProjectileAndAsteroidCollision(gameLoop.getGame().getPoints(), now);
     }
 
@@ -31,10 +41,12 @@ public class CollisionHandler {
         }));
     }
 
-    public void checkShipAndAsteroidCollision(GameLoop gameLoop) {
+    public void checkShipAndAsteroidCollision(GameLoop gameLoop, long now) {
         this.asteroids.getList().forEach(asteroid -> {
-            if (this.ship.collide(asteroid)) {
-                gameLoop.gameOver();
+            if (this.ship.collide(asteroid) && !this.ship.isNotAlive()) {
+                this.ship.disappear(now);
+                gameLoop.getGame().gameOver();
+                // TODO play ship destroy animation
             }
         });
     }

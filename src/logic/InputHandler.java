@@ -1,3 +1,6 @@
+package logic;
+
+import entities.Ship;
 import javafx.scene.input.KeyCode;
 
 import java.util.HashMap;

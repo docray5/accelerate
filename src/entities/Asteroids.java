@@ -1,3 +1,6 @@
+package entities;
+
+import game.Game;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -48,12 +51,16 @@ public class Asteroids {
         ArrayList<int[]> newAsteroids = new ArrayList<>();
         this.asteroids.forEach(asteroid -> {
             if (asteroid.isNotAlive() && asteroid.getSize() > 5) {
-                newAsteroids.add(new int[]{(int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(), asteroid.getSize() / 2});
+                for (int i = 0; i < 2; i++) newAsteroids.add(new int[]{(int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(), asteroid.getSize() / 2});
             }
         });
 
         for (int[] arr : newAsteroids) {
             this.addAsteroid(arr[0], arr[1], arr[2]);
         }
+    }
+
+    public void clear() {
+        this.asteroids.clear();
     }
 }
