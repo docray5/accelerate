@@ -50,17 +50,22 @@ public abstract class Character {
         double changeX = Math.cos(Math.toRadians(this.character.getRotate()));
         double changeY = Math.sin(Math.toRadians(this.character.getRotate()));
 
+        double max = maxSpeed*Game.FPS_RATIO;
+
         changeX *= speed;
         changeX *= Game.FPS_RATIO;
         changeY *= speed;
         changeY *= Game.FPS_RATIO;
 
-        if (this.movement.getX() + changeX > maxSpeed) return;
-        if (this.movement.getX() + changeX < -maxSpeed) return;
-        if (this.movement.getY() + changeY > maxSpeed) return;
-        if (this.movement.getY() + changeY < -maxSpeed) return;
+        // when going diagonally and hitting max speed on one axis we still move over to the other axis there is a fix possible but not worth the performance:
+        // if we hit max speed we set variable hitMaxX to true and if that is true we don't add any values to Y variable and vice versa
+        if (this.movement.getX() + changeX > max) changeX = 0;
+        if (this.movement.getX() + changeX < -max) changeX = 0;
+        if (this.movement.getY() + changeY > max) changeY = 0;
+        if (this.movement.getY() + changeY < -max) changeY = 0;
 
         this.movement = this.movement.add(changeX, changeY);
+        this.movement.normalize();
     }
 
     /**

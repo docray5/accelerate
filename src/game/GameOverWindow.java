@@ -14,6 +14,7 @@ import javafx.util.Duration;
 public class GameOverWindow {
 
     private final Pane gameOverPane;
+    private final Button restartBtn;
 
     public GameOverWindow(Game game) {
         this.gameOverPane = new Pane();
@@ -26,12 +27,12 @@ public class GameOverWindow {
         overText.setTextFill(Color.AZURE);
         overText.setFont(Font.font("Helvetica", 44));
 
-        Button button = new Button("Start over.");
-        button.setOnMouseClicked(mouseEvent -> game.restart());
-        button.setPrefSize(200, 40);
-        button.getStyleClass().add("btn-restart");
+        this.restartBtn = new Button("Start over.");
+        this.restartBtn.setOnAction(event -> game.restart());
+        this.restartBtn.setPrefSize(200, 40);
+        this.restartBtn.getStyleClass().add("btn-restart");
 
-        VBox vBox = new VBox(overText, button);
+        VBox vBox = new VBox(overText, this.restartBtn);
         vBox.setPrefSize(Game.WIDTH/3.0, Game.HEIGHT/3.0);
         vBox.setPadding(new Insets(10));
         vBox.setSpacing(10);
@@ -45,14 +46,15 @@ public class GameOverWindow {
     }
 
     public void display() {
-        // TODO make gameOverWindow slide in\out from the bottom smoothly
         this.gameOverPane.setVisible(true);
         TranslateTransition open = new TranslateTransition(new Duration(350), this.gameOverPane);
         open.setToY(0);
         open.play();
+        this.restartBtn.setDefaultButton(true);
     }
 
     public void hide() {
+        this.restartBtn.setDefaultButton(false);
         TranslateTransition close = new TranslateTransition(new Duration(350), this.gameOverPane);
         close.setToY(350);
         close.play();

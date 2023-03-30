@@ -35,6 +35,8 @@ public class Ship extends Character {
         this.setAlive(true);
         this.getCharacter().setTranslateX(Game.WIDTH/2.0);
         this.getCharacter().setTranslateY(Game.HEIGHT/2.0);
+        this.getCharacter().setRotate(0);
+        this.setMovement(new Point2D(0, 0));
     }
 
     public void shoot(long now) {

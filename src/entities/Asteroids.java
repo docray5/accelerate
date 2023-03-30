@@ -34,7 +34,7 @@ public class Asteroids {
     }
 
     public void spawnAsteroid() {
-        if(Math.random() < 0.0025 * Game.FPS_RATIO) {
+        if(Math.random() < 0.0025 * Game.FPS_RATIO && !this.ship.isNotAlive()) {
             addAsteroid(Game.WIDTH + 10, Game.HEIGHT + 10, 20);
         }
     }
