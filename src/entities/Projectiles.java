@@ -49,9 +49,9 @@ public class Projectiles {
     }
 
     public void addProjectile(Ship ship, long now) {
-        if (this.projectiles.size() < 6 && now - this.lastProjectileTime > 300_000_000L) {
+        if (this.projectiles.size() < 5 && now - this.lastProjectileTime > 400_000_000L) {
             Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(),
-                    (int) ship.getCharacter().getTranslateY(), now, 4_000_000_000L);
+                    (int) ship.getCharacter().getTranslateY(), now, 1_600_000_000L);
             projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
             projectile.accelerate(Game.PROJECTILE_SPEED);
             projectile.setMovement(projectile.getMovement().normalize().multiply(3 * Game.FPS_RATIO));
