@@ -1,3 +1,6 @@
+
+// TODO add main menu at the start, maybe also add power ups and modifiable color pallet
+
 package game;
 
 import entities.Asteroids;
@@ -5,7 +8,7 @@ import entities.Particles;
 import entities.Projectiles;
 import entities.Ship;
 import javafx.scene.Scene;
-import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -21,10 +24,10 @@ public class Game {
     public static final int HEIGHT = 600;
     public static double FPS_RATIO = 1;
     public static Color BACKGROUND = Color.rgb(57, 57, 74);
-    public static Color ASTEROID_COLOR = Color.rgb(224, 75, 103);
-    public static Color SHIP_COLOR = Color.rgb(70, 196, 195);
+    public static Color ASTEROID_COLOR = Color.rgb(255, 63, 102);
+    public static Color SHIP_COLOR = Color.rgb(65, 255, 254);
     // when adding thruster color to ship change ship to be light green grass and thruster to be the current ship color
-    public static Color PROJECTILE_COLOR = Color.rgb(202, 132, 39);
+    public static Color PROJECTILE_COLOR = Color.rgb(255, 161, 40);
     public static Color POINTS_COLOR = Color.rgb(70, 70, 93);
     public static double ASTEROID_SPEED = 0.08;
     public static double PROJECTILE_SPEED = 0.15;
@@ -42,13 +45,14 @@ public class Game {
     private CollisionHandler collisionHandler;
     private GameOverWindow gameOverWindow;
 
-    // TODO maybe change it so each class has one parameter, Game game and from there we can get all the panes and other parameters
+    // TODO maybe change it so each class has one parameter, game and from there we can get all the panes and other parameters
 
     public Game() {
         this.initialize();
     }
 
     private void initialize() {
+        FPS_RATIO = 143.0 / java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].getDisplayMode().getRefreshRate();
         StackPane root = new StackPane();
         // For a shadow effect when on game over window Put different color
         root.setBackground(Background.fill(BACKGROUND));
@@ -58,7 +62,6 @@ public class Game {
         this.gamePane.setBackground(Background.fill(BACKGROUND));
 
         this.particles = new Particles(this.gamePane);
-
         this.projectiles = new Projectiles(this.gamePane, this.particles);
 
         this.points = new Points();
@@ -82,22 +85,20 @@ public class Game {
     }
 
     public void gameOver() {
-        this.gamePane.setEffect(new GaussianBlur(30));
-        this.gameOverWindow.display();
+        this.gamePane.setEffect(new BoxBlur(15, 15, 3));
+        this.gameOverWindow.display(this.points.getPointsNum());
         this.inputHandler = new InputHandler(this.ship);
-        System.out.println("Over!");
     }
 
     public void restart() {
-        System.out.println("restart");
         this.gameOverWindow.hide();
         this.gamePane.setEffect(null);
+        this.ship.appear();
+        this.points.reset();
+        this.gamePane.getChildren().setAll(this.points.getText(), this.ship.getCharacter());
         this.particles.clear();
         this.projectiles.clear();
         this.asteroids.clear();
-        this.points.reset();
-        this.gamePane.getChildren().setAll(this.points.getText(), this.ship.getCharacter());
-        this.ship.appear();
         spawnAsteroids();
     }
 
