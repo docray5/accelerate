@@ -1,6 +1,6 @@
 package utils;
 
-import game.Game;
+//import game.Game;
 
 public class FpsCounter {
     private long lastSecond;
@@ -14,11 +14,12 @@ public class FpsCounter {
     public void countAndPrint(long now) {
         if (now - lastSecond > 1_000_000_000L) {
             double fps = ((double) frameCount / (now - lastSecond)) * 1_000_000_000L; // type conversion is slow
+            if (this.lastSecond == 0) fps = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].getDisplayMode().getRefreshRate();
             System.out.println(fps);
 
             // -------------Calc FPS ratio--------------
             // works kinda like delta time, but we just calculate the ratio instead
-            if (fps != 0.0) Game.FPS_RATIO = 143 / fps;
+            //Game.FPS_RATIO = 143.0 / fps;
 
             lastSecond = now;
             frameCount = 0;
