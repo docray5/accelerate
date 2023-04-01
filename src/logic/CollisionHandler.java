@@ -5,7 +5,6 @@ import entities.Particles;
 import entities.Projectiles;
 import entities.Ship;
 import game.Game;
-import game.GameLoop;
 import game.Points;
 
 public class CollisionHandler {
@@ -21,9 +20,9 @@ public class CollisionHandler {
         this.asteroids = asteroids;
     }
 
-    public void handleCollisions(GameLoop gameLoop, long now) {
-        this.checkShipAndAsteroidCollision(gameLoop, now);
-        this.checkProjectileAndAsteroidCollision(gameLoop.getGame().getPoints(), now);
+    public void handleCollisions(Game game, long now) {
+        this.checkShipAndAsteroidCollision(game, now);
+        this.checkProjectileAndAsteroidCollision(game.getPoints(), now);
     }
 
     public void checkProjectileAndAsteroidCollision(Points points, long now) {
@@ -41,12 +40,11 @@ public class CollisionHandler {
         }));
     }
 
-    public void checkShipAndAsteroidCollision(GameLoop gameLoop, long now) {
+    public void checkShipAndAsteroidCollision(Game game, long now) {
         this.asteroids.getList().forEach(asteroid -> {
             if (this.ship.collide(asteroid) && !this.ship.isNotAlive()) {
                 this.ship.disappear(now);
-                gameLoop.getGame().gameOver();
-                // TODO play ship destroy animation
+                game.gameOver();
             }
         });
     }

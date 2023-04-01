@@ -33,7 +33,7 @@ public class GameLoop extends AnimationTimer {
         this.game.getParticles().checkLifeTime(now);
         this.game.getProjectiles().checkLifeTime(now);
 
-        this.game.getCollisionHandler().handleCollisions(this, now);
+        this.game.getCollisionHandler().handleCollisions(this.getGame(), now);
 
         // ----------breaking asteroids into smaller pieces-------------
         this.game.getAsteroids().breakIntoSmallerPieces();
