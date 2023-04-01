@@ -21,6 +21,10 @@ public class Points {
         this.text.setText("Points: 0");
     }
 
+    public int getPointsNum() {
+        return this.points.get();
+    }
+
     public Text getText() {
         return text;
     }
