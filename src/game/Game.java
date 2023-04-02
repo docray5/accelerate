@@ -7,11 +7,10 @@ import entities.Asteroids;
 import entities.Particles;
 import entities.Projectiles;
 import entities.Ship;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import logic.CollisionHandler;
 import logic.InputHandler;
@@ -55,11 +54,11 @@ public class Game {
         FPS_RATIO = 143.0 / java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].getDisplayMode().getRefreshRate();
         StackPane root = new StackPane();
         // For a shadow effect when on game over window Put different color
-        root.setBackground(Background.fill(BACKGROUND));
+        root.setBackground(new Background(new BackgroundFill(BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
 
         this.gamePane = new Pane();
         this.gamePane.setPrefSize(WIDTH, HEIGHT);
-        this.gamePane.setBackground(Background.fill(BACKGROUND));
+        this.gamePane.setBackground(new Background(new BackgroundFill(BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
 
         this.particles = new Particles(this.gamePane);
         this.projectiles = new Projectiles(this.gamePane, this.particles);
