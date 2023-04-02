@@ -1,14 +1,14 @@
 package game;
 
 import javafx.animation.AnimationTimer;
-import utils.FpsCounter;
+//import utils.FpsCounter;
 
 public class GameLoop extends AnimationTimer {
-    private final FpsCounter fpsCounter;
+    //private final FpsCounter counter;
     private final Game game;
 
     public GameLoop() {
-        this.fpsCounter = new FpsCounter();
+        //this.fpsCounter = new FpsCounter();
         this.game = new Game();
     }
 
@@ -18,7 +18,7 @@ public class GameLoop extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        this.fpsCounter.countAndPrint(now); // it also calculates FPS_RATIO
+        //this.fpsCounter.countAndPrint(now); // it also calculates FPS_RATIO
 
         // ----------------Controls-----------------
         this.game.getInputHandler().handleInput(now);
